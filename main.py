@@ -40,9 +40,13 @@ class Application(Tk):
         self.operation_keys_frame.columnconfigure(1, minsize=66)
         self.operation_keys_frame.columnconfigure(2, minsize=66)
 
+        self.display = Label(self.display_frame, text='0', bg='#D4D4D4', relief='sunken', font=('TkDefaultFont', 30), width=16, anchor='e')
+
         self.display_frame.pack()
         self.numeric_keys_frame.pack(side='left')
         self.operation_keys_frame.pack(side='right')
+
+        self.display.pack()
 
         self.numeric_buttons_organization()
     
@@ -51,16 +55,16 @@ class Application(Tk):
 
         for b in range(-2, 10):
             if b == -2:
-                self.buttons.append(Button(self.numeric_keys_frame, text='+/-', width=6, height=3, padx=4, pady=4))
+                self.buttons.append(Button(self.numeric_keys_frame, text='+/-', width=6, height=3, padx=4, pady=4, command=lambda char=str(b): self.button_action(self.display, char)))
                 self.buttons[-1].grid(row=keygrid[0], column=keygrid[1])
             elif b == -1:
-                self.buttons.append(Button(self.numeric_keys_frame, text='0', width=6, height=3, padx=4, pady=4))
+                self.buttons.append(Button(self.numeric_keys_frame, text='0', width=6, height=3, padx=4, pady=4, command=lambda char='0': self.button_action(self.display, char)))
                 self.buttons[-1].grid(row=keygrid[0], column=keygrid[1])
             elif b == 0:
                 self.buttons.append(Button(self.numeric_keys_frame, text=',', width=6, height=3, padx=4, pady=4))
                 self.buttons[-1].grid(row=keygrid[0], column=keygrid[1])
             else:
-                self.buttons.append(Button(self.numeric_keys_frame, text=str(b), width=6, height=3, padx=4, pady=4))
+                self.buttons.append(Button(self.numeric_keys_frame, text=str(b), width=6, height=3, padx=4, pady=4, command=lambda char=str(b): self.button_action(self.display, char)))
                 self.buttons[-1].grid(row=keygrid[0], column=keygrid[1])
 
             if keygrid[1] == 2:
@@ -68,7 +72,14 @@ class Application(Tk):
                 keygrid[1] = 0
             else:
                 keygrid[1] += 1
-
+    
+    def button_action(self, master: Misc, text: str):
+        if text == '-2':
+            master['text'] = str(int(master['text']) * -1)
+        elif master['text'] == '0':
+            master['text'] = text
+        else:
+            master['text'] += text
 
 test = Application()
 test.mainloop()
