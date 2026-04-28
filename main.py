@@ -74,12 +74,13 @@ class Application(Tk):
                 keygrid[1] += 1
     
     def button_action(self, master: Misc, text: str):
-        if text == '-2':
-            master['text'] = str(int(master['text']) * -1)
-        elif master['text'] == '0':
-            master['text'] = text
-        else:
-            master['text'] += text
+        if len(master['text']) < 12 or text == '-2':
+            if text == '-2':
+                master['text'] = str(int(master['text']) * -1)
+            elif master['text'] == '0':
+                master['text'] = text
+            else:
+                master['text'] += text
 
 test = Application()
 test.mainloop()
