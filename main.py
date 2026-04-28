@@ -1,4 +1,5 @@
 from tkinter import *
+from decimal import Decimal
 
 class Calculator:
     def __init__(self):
@@ -61,7 +62,7 @@ class Application(Tk):
                 self.buttons.append(Button(self.numeric_keys_frame, text='0', width=6, height=3, padx=4, pady=4, command=lambda char='0': self.button_action(self.display, char)))
                 self.buttons[-1].grid(row=keygrid[0], column=keygrid[1])
             elif b == 0:
-                self.buttons.append(Button(self.numeric_keys_frame, text=',', width=6, height=3, padx=4, pady=4))
+                self.buttons.append(Button(self.numeric_keys_frame, text=',', width=6, height=3, padx=4, pady=4, command=lambda char='decimal': self.button_action(self.display, char)))
                 self.buttons[-1].grid(row=keygrid[0], column=keygrid[1])
             else:
                 self.buttons.append(Button(self.numeric_keys_frame, text=str(b), width=6, height=3, padx=4, pady=4, command=lambda char=str(b): self.button_action(self.display, char)))
@@ -74,9 +75,16 @@ class Application(Tk):
                 keygrid[1] += 1
     
     def button_action(self, master: Misc, text: str):
+        is_decimal: bool = master['text'].find('.') >= 0
         if len(master['text']) < 12 or text == '-2':
             if text == '-2':
-                master['text'] = str(int(master['text']) * -1)
+                if is_decimal:
+                    master['text'] = str(Decimal(master['text']) * Decimal('-1'))
+                else:
+                    master['text'] = str(int(master['text']) * -1)
+            elif text == 'decimal':
+                if not is_decimal:
+                    master['text'] += '.'
             elif master['text'] == '0':
                 master['text'] = text
             else:
